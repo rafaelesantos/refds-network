@@ -8,5 +8,5 @@
 import Foundation
 
 public protocol RefdsNetworkPathProtocol {
-    var value: String { get set }
+    var value: String { get }
 }
