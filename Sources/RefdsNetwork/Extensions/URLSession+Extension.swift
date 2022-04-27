@@ -15,13 +15,9 @@ public extension URLSession {
         do {
             let request = try endpoint.setupRequest(with: requestData)
             return dataTaskPublisher(for: request)
+                .receive(on: RunLoop.main)
                 .map(\.data)
-                .decode(type: RefdsNetworkResponse<R>.self, decoder: JSONDecoder())
-                .map(\.result)
-                .mapError({ error in
-                    print(error.localizedDescription)
-                    return error
-                })
+                .decode(type: R.self, decoder: JSONDecoder())
                 .eraseToAnyPublisher()
         } catch {
             return Fail(error: error)
