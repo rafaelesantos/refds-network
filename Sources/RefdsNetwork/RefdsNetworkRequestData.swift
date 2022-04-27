@@ -17,6 +17,12 @@ public struct RefdsNetworkRequestData: RefdsNetworkRequestDataProtocol {
     public var body: Data?
     public var method: RefdsNetworkHTTPMethod
     public var headers: RefdsNetworkHTTPHeaders
+    
+    public init(body: Data? = nil, method: RefdsNetworkHTTPMethod, headers: RefdsNetworkHTTPHeaders) {
+        self.body = body
+        self.method = method
+        self.headers = headers
+    }
 }
 
 // MARK: Default Values
