@@ -10,8 +10,8 @@ import Combine
 
 @available(iOS 13.0, *)
 @available(macOS 10.15, *)
-extension URLSession {
-    public func publisher<R>(for endpoint: RefdsNetworkEndpoint<R>, using requestData: RefdsNetworkRequestDataProtocol) -> AnyPublisher<R, Error> {
+public extension URLSession {
+    func publisher<R>(for endpoint: RefdsNetworkEndpoint<R>, using requestData: RefdsNetworkRequestDataProtocol) -> AnyPublisher<R, Error> {
         do {
             let request = try endpoint.setupRequest(with: requestData)
             return dataTaskPublisher(for: request)

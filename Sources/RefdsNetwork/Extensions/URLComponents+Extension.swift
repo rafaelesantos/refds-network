@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension URLComponents {
+public extension URLComponents {
     func build(with configuration: RefdsNetworkConfigurationProtocol) -> Self {
         var urlComponents = self
         urlComponents.scheme = configuration.scheme

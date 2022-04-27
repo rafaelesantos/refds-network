@@ -21,8 +21,8 @@ public struct RefdsNetworkEndpoint<Response: Decodable>: RefdsNetworkEndpointPro
     public var queryItems: RefdsNetworkQueryItemsProtocol
 }
 
-extension RefdsNetworkEndpoint {
-    public func setupRequest(with dataRequest: RefdsNetworkRequestDataProtocol) throws -> URLRequest {
+public extension RefdsNetworkEndpoint {
+    func setupRequest(with dataRequest: RefdsNetworkRequestDataProtocol) throws -> URLRequest {
         let components = URLComponents()
             .build(with: configuration)
             .with(path: path)

@@ -8,5 +8,5 @@
 import Foundation
 
 public struct RefdsNetworkResponse<Wrapped: Decodable>: Decodable {
-    var result: Wrapped
+    public var result: Wrapped
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension URLRequest {
+public extension URLRequest {
     func prepared(with requestData: RefdsNetworkRequestDataProtocol) -> Self {
         var request = self
         request.httpBody = requestData.body
