@@ -19,6 +19,16 @@ public struct RefdsNetworkEndpoint<Response: Decodable>: RefdsNetworkEndpointPro
     public var configuration: RefdsNetworkConfigurationProtocol
     public var path: RefdsNetworkPathProtocol
     public var queryItems: RefdsNetworkQueryItemsProtocol
+    
+    public init(
+        configuration: RefdsNetworkConfigurationProtocol,
+        path: RefdsNetworkPathProtocol,
+        queryItems: RefdsNetworkQueryItemsProtocol)
+    {
+        self.configuration = configuration
+        self.path = path
+        self.queryItems = queryItems
+    }
 }
 
 public extension RefdsNetworkEndpoint {
