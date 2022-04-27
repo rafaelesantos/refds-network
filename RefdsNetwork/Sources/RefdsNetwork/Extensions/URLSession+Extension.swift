@@ -1,0 +1,27 @@
+//
+//  URLSession+Extension.swift
+//  
+//
+//  Created by Rafael Santos on 26/04/22.
+//
+
+import Foundation
+import Combine
+
+@available(iOS 13.0, *)
+@available(macOS 10.15, *)
+extension URLSession {
+    public func publisher<R>(for endpoint: RefdsNetworkEndpoint<R>, using requestData: RefdsNetworkRequestDataProtocol) -> AnyPublisher<R, Error> {
+        do {
+            let request = try endpoint.setupRequest(with: requestData)
+            return dataTaskPublisher(for: request)
+                .map(\.data)
+                .decode(type: RefdsNetworkResponse<R>.self, decoder: JSONDecoder())
+                .map(\.result)
+                .eraseToAnyPublisher()
+        } catch {
+            return Fail(error: error)
+                .eraseToAnyPublisher()
+        }
+    }
+}
