@@ -18,7 +18,10 @@ public extension URLSession {
                 .map(\.data)
                 .decode(type: RefdsNetworkResponse<R>.self, decoder: JSONDecoder())
                 .map(\.result)
-                .breakpointOnError()
+                .mapError({ error in
+                    print(error.localizedDescription)
+                    return error
+                })
                 .eraseToAnyPublisher()
         } catch {
             return Fail(error: error)
