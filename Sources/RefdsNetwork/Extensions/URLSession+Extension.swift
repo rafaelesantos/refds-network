@@ -17,7 +17,9 @@ public extension URLSession {
             return dataTaskPublisher(for: request)
                 .map(\.data)
                 .decode(type: RefdsNetworkResponse<R>.self, decoder: JSONDecoder())
-                .map(\.result)
+                .map({ networkResponse in
+                    return networkResponse.result
+                })
                 .eraseToAnyPublisher()
         } catch {
             return Fail(error: error)
