@@ -13,14 +13,14 @@ public struct RefdsNetwork {
     public static let shared = RefdsNetwork()
     private let urlSession = URLSession.shared
     
-    public func load<R>(
-        for endpoint: RefdsNetworkEndpoint<R>,
+    public func load<R: Decodable>(
+        for endpoint: RefdsNetworkEndpointProtocol,
         using requestData: RefdsNetworkRequestDataProtocol
     ) -> AnyPublisher<R, Error> {
         return urlSession.publisher(for: endpoint, using: requestData)
     }
     
-    public func load<R: Codable>(
+    public func load<R: Decodable>(
         scheme: String = "https",
         host: String,
         path: String,
@@ -32,7 +32,7 @@ public struct RefdsNetwork {
         let configuration = Configuration(scheme: scheme, host: host)
         let path = Path(value: path)
         let queryItems = QueryItems(value: queryItems)
-        let endpoint = RefdsNetworkEndpoint<R>(configuration: configuration, path: path, queryItems: queryItems)
+        let endpoint = Endpoint(configuration: configuration, path: path, queryItems: queryItems)
         let requestData = RequestData(method: method, headers: headers)
         return urlSession.publisher(for: endpoint, using: requestData)
     }
@@ -41,6 +41,12 @@ public struct RefdsNetwork {
 @available(iOS 13.0, *)
 @available(macOS 10.15, *)
 extension RefdsNetwork {
+    private struct Endpoint: RefdsNetworkEndpointProtocol {
+        var configuration: RefdsNetworkConfigurationProtocol
+        var path: RefdsNetworkPathProtocol
+        var queryItems: RefdsNetworkQueryItemsProtocol
+    }
+    
     private struct Configuration: RefdsNetworkConfigurationProtocol {
         var scheme: String
         var host: String

@@ -28,7 +28,7 @@ final class RefdsNetworkTests: XCTestCase {
                 expectation.fulfill()
             } receiveValue: { checkEmail in
                 print(checkEmail)
-                XCTAssertEqual(checkEmail.message, "1")
+                XCTAssertEqual(checkEmail.message, "0")
                 expectation.fulfill()
             }
         self.wait(for: [expectation], timeout: 20)

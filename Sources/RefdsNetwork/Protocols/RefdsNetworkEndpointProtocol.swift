@@ -1,5 +1,5 @@
 //
-//  RefdsNetworkEndpoint.swift
+//  RefdsNetworkEndpointProtocol.swift
 //  
 //
 //  Created by Rafael Santos on 26/04/22.
@@ -15,23 +15,7 @@ public protocol RefdsNetworkEndpointProtocol {
     func setupRequest(with dataRequest: RefdsNetworkRequestDataProtocol) throws -> URLRequest
 }
 
-public struct RefdsNetworkEndpoint<Response: Decodable>: RefdsNetworkEndpointProtocol {
-    public var configuration: RefdsNetworkConfigurationProtocol
-    public var path: RefdsNetworkPathProtocol
-    public var queryItems: RefdsNetworkQueryItemsProtocol
-    
-    public init(
-        configuration: RefdsNetworkConfigurationProtocol,
-        path: RefdsNetworkPathProtocol,
-        queryItems: RefdsNetworkQueryItemsProtocol)
-    {
-        self.configuration = configuration
-        self.path = path
-        self.queryItems = queryItems
-    }
-}
-
-public extension RefdsNetworkEndpoint {
+public extension RefdsNetworkEndpointProtocol {
     func setupRequest(with dataRequest: RefdsNetworkRequestDataProtocol) throws -> URLRequest {
         let components = URLComponents()
             .build(with: configuration)
