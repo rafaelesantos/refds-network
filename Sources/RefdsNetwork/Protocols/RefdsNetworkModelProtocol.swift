@@ -11,15 +11,6 @@ import Combine
 @available(iOS 13.0, *)
 @available(macOS 10.15, *)
 public protocol RefdsNetworkModelProtocol: Codable {
-    static func getEndpoint() -> RefdsNetworkEndpointProtocol
     static func getRequestData() -> RefdsNetworkRequestDataProtocol
     static func load() -> AnyPublisher<Self, Error>
-}
-
-@available(iOS 13.0, *)
-@available(macOS 10.15, *)
-public extension RefdsNetworkModelProtocol {
-    static func load() -> AnyPublisher<Self, Error> {
-        return RefdsNetwork.shared.load(for: getEndpoint(), using: getRequestData())
-    }
 }
