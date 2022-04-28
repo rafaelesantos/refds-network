@@ -32,7 +32,7 @@ public struct RefdsNetwork {
         let configuration = Configuration(scheme: scheme, host: host)
         let path = Path(value: path)
         let queryItems = QueryItems(value: queryItems)
-        let endpoint = Endpoint(configuration: configuration, path: path, queryItems: queryItems)
+        let endpoint = RefdsNetworkEndpoint<R>(configuration: configuration, path: path, queryItems: queryItems)
         let requestData = RequestData(method: method, headers: headers)
         return urlSession.publisher(for: endpoint, using: requestData)
     }
@@ -41,12 +41,6 @@ public struct RefdsNetwork {
 @available(iOS 13.0, *)
 @available(macOS 10.15, *)
 extension RefdsNetwork {
-    private struct Endpoint: RefdsNetworkEndpointProtocol {
-        var configuration: RefdsNetworkConfigurationProtocol
-        var path: RefdsNetworkPathProtocol
-        var queryItems: RefdsNetworkQueryItemsProtocol
-    }
-    
     private struct Configuration: RefdsNetworkConfigurationProtocol {
         var scheme: String
         var host: String
