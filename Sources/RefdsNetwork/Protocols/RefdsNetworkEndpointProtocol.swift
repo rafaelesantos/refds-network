@@ -9,7 +9,7 @@ import Foundation
 
 
 public protocol RefdsNetworkEndpointProtocol {
-    var configuration: RefdsNetworkConfigurationProtocol { get }
+    var base: RefdsNetworkBaseProtocol { get }
     var path: RefdsNetworkPathProtocol { get }
     var queryItems: RefdsNetworkQueryItemsProtocol { get }
     
@@ -19,7 +19,7 @@ public protocol RefdsNetworkEndpointProtocol {
 public extension RefdsNetworkEndpointProtocol {
     func setupRequest(with dataRequest: RefdsNetworkRequestDataProtocol) throws -> URLRequest {
         let components = URLComponents()
-            .build(with: configuration)
+            .build(with: base)
             .with(path: path)
             .with(queryItems: queryItems)
         

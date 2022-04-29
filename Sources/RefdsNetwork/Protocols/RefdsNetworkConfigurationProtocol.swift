@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol RefdsNetworkConfigurationProtocol {
+public protocol RefdsNetworkBaseProtocol {
     var scheme: RefdsNetworkScheme { get set }
     var host: String { get set }
 }

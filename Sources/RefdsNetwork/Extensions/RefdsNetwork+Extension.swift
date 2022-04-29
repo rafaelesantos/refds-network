@@ -10,12 +10,12 @@ import Combine
 
 @available(iOS 13.0, *)
 @available(macOS 10.15, *)
-extension RefdsNetwork {
-    public func configuration(
+extension RefdsNetwork.Configuration {
+    public func base(
         scheme: RefdsNetworkScheme,
         host: String
-    ) -> RefdsNetworkConfigurationProtocol {
-        return Configuration(
+    ) -> RefdsNetworkBaseProtocol {
+        return Base(
             scheme: scheme,
             host: host
         )
@@ -30,13 +30,13 @@ extension RefdsNetwork {
     }
     
     public func endpoint<R: Decodable>(
-        configuration: RefdsNetworkConfigurationProtocol,
+        configuration: RefdsNetworkBaseProtocol,
         path: RefdsNetworkPathProtocol,
         queryItems: RefdsNetworkQueryItemsProtocol,
         _ type: R.Type
     ) -> RefdsNetworkEndpointProtocol {
         return Endpoint<R>(
-            configuration: configuration,
+            base: configuration,
             path: path,
             queryItems: queryItems
         )
@@ -57,8 +57,8 @@ extension RefdsNetwork {
     public func service(
         endpoint: RefdsNetworkEndpointProtocol,
         requestData: RefdsNetworkRequestDataProtocol
-    ) -> RefdsNetworkServiceProtocol {
-        return Service(
+    ) -> RefdsNetworkServiceConfigurationProtocol {
+        return ServiceConfiguration(
             endpoint: endpoint,
             requestData: requestData
         )
@@ -72,14 +72,14 @@ extension RefdsNetwork {
         method: RefdsNetworkHTTPMethod,
         headers: RefdsNetworkHTTPHeaders,
         responseType: R.Type
-    ) -> RefdsNetworkServiceProtocol {
-        let configuration = Configuration(scheme: scheme, host: host)
+    ) -> RefdsNetworkServiceConfigurationProtocol {
+        let configuration = Base(scheme: scheme, host: host)
         let path = Path(value: path)
         let queryItems = QueryItems(values: queryItems)
-        let endpoint = Endpoint<R>(configuration: configuration, path: path, queryItems: queryItems)
+        let endpoint = Endpoint<R>(base: configuration, path: path, queryItems: queryItems)
         let requestData = RequestData(method: method, headers: headers)
         
-        return Service(endpoint: endpoint, requestData: requestData)
+        return ServiceConfiguration(endpoint: endpoint, requestData: requestData)
     }
 }
 
@@ -87,8 +87,8 @@ extension RefdsNetwork {
 
 @available(iOS 13.0, *)
 @available(macOS 10.15, *)
-extension RefdsNetwork {
-    private struct Configuration: RefdsNetworkConfigurationProtocol {
+extension RefdsNetwork.Configuration {
+    private struct Base: RefdsNetworkBaseProtocol {
         var scheme: RefdsNetworkScheme
         var host: String
     }
@@ -108,12 +108,12 @@ extension RefdsNetwork {
     }
     
     private struct Endpoint<Response: Decodable>: RefdsNetworkEndpointProtocol {
-        var configuration: RefdsNetworkConfigurationProtocol
+        var base: RefdsNetworkBaseProtocol
         var path: RefdsNetworkPathProtocol
         var queryItems: RefdsNetworkQueryItemsProtocol
     }
     
-    private struct Service: RefdsNetworkServiceProtocol {
+    private struct ServiceConfiguration: RefdsNetworkServiceConfigurationProtocol {
         var endpoint: RefdsNetworkEndpointProtocol
         var requestData: RefdsNetworkRequestDataProtocol
     }

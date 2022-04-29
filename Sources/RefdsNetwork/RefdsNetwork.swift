@@ -10,14 +10,17 @@ import Combine
 @available(iOS 13.0, *)
 @available(macOS 10.15, *)
 public struct RefdsNetwork {
+    public struct Configuration {}
+    
     public static let shared = RefdsNetwork()
     private let urlSession = URLSession.shared
+    public let configuration = Configuration()
     
-    public func request<R: Decodable>(for service: RefdsNetworkServiceProtocol) -> AnyPublisher<R, Error> {
+    public func request<R: Decodable>(for service: RefdsNetworkServiceConfigurationProtocol) -> AnyPublisher<R, Error> {
         return urlSession.publisher(for: service.endpoint, using: service.requestData)
     }
     
-    public func request<R: Decodable>(for service: RefdsNetworkServiceProtocol, completion: @escaping (Result<R, Error>) -> ()) {
+    public func request<R: Decodable>(for service: RefdsNetworkServiceConfigurationProtocol, completion: @escaping (Result<R, Error>) -> ()) {
         _ = urlSession.publisher(for: service.endpoint, using: service.requestData)
             .sink(receiveCompletion: { result in
                 switch result {
@@ -27,7 +30,7 @@ public struct RefdsNetwork {
             }, receiveValue: { completion(.success($0)) })
     }
     
-    public func request<R: Decodable>(for service: RefdsNetworkServiceProtocol) async throws -> R {
+    public func request<R: Decodable>(for service: RefdsNetworkServiceConfigurationProtocol) async throws -> R {
         return try await urlSession.publisher(for: service.endpoint, using: service.requestData).async()
     }
 }
@@ -44,7 +47,7 @@ extension RefdsNetwork {
         headers: RefdsNetworkHTTPHeaders,
         responseType: R.Type
     ) -> AnyPublisher<R, Error> {
-        let service = service(
+        let service = configuration.service(
             scheme: scheme,
             host: host,
             path: path,
@@ -66,7 +69,7 @@ extension RefdsNetwork {
         responseType: R.Type,
         completion: @escaping (Result<R, Error>) -> ()
     ) {
-        let service = service(
+        let service = configuration.service(
             scheme: scheme,
             host: host,
             path: path,
@@ -94,7 +97,7 @@ extension RefdsNetwork {
         headers: RefdsNetworkHTTPHeaders,
         responseType: R.Type
     ) async throws -> R {
-        let service = service(
+        let service = configuration.service(
             scheme: scheme,
             host: host,
             path: path,

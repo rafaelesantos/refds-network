@@ -8,7 +8,7 @@
 import Foundation
 
 public extension URLComponents {
-    func build(with configuration: RefdsNetworkConfigurationProtocol) -> Self {
+    func build(with configuration: RefdsNetworkBaseProtocol) -> Self {
         var urlComponents = self
         urlComponents.scheme = configuration.scheme.rawValue
         urlComponents.host = configuration.host
