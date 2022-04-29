@@ -36,7 +36,7 @@ extension RefdsNetwork.Configuration {
         _ type: R.Type
     ) -> RefdsNetworkEndpointProtocol {
         return Endpoint<R>(
-            base: configuration,
+            base: base,
             path: path,
             queryItems: queryItems
         )
@@ -73,10 +73,10 @@ extension RefdsNetwork.Configuration {
         headers: RefdsNetworkHTTPHeaders,
         responseType: R.Type
     ) -> RefdsNetworkServiceConfigurationProtocol {
-        let configuration = Base(scheme: scheme, host: host)
+        let base = Base(scheme: scheme, host: host)
         let path = Path(value: path)
         let queryItems = QueryItems(values: queryItems)
-        let endpoint = Endpoint<R>(base: configuration, path: path, queryItems: queryItems)
+        let endpoint = Endpoint<R>(base: base, path: path, queryItems: queryItems)
         let requestData = RequestData(method: method, headers: headers)
         
         return ServiceConfiguration(endpoint: endpoint, requestData: requestData)
