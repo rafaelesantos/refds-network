@@ -30,7 +30,7 @@ extension RefdsNetwork.Configuration {
     }
     
     public func endpoint<R: Decodable>(
-        configuration: RefdsNetworkBaseProtocol,
+        base: RefdsNetworkBaseProtocol,
         path: RefdsNetworkPathProtocol,
         queryItems: RefdsNetworkQueryItemsProtocol,
         _ type: R.Type

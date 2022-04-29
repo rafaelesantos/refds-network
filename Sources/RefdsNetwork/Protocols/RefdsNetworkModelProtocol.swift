@@ -10,7 +10,7 @@ import Combine
 
 @available(iOS 13.0, *)
 @available(macOS 10.15, *)
-public protocol RefdsNetworkModelProtocol: Decodable {
+public protocol RefdsNetworkModelProtocol: Codable {
     static var serviceConfiguration: RefdsNetworkServiceConfigurationProtocol { get }
     static func request() -> AnyPublisher<Self, Error>
     static func request(completion: @escaping (Result<Self, Error>) -> ())
