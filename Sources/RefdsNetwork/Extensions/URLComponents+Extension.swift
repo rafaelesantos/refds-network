@@ -10,7 +10,7 @@ import Foundation
 public extension URLComponents {
     func build(with configuration: RefdsNetworkConfigurationProtocol) -> Self {
         var urlComponents = self
-        urlComponents.scheme = configuration.scheme
+        urlComponents.scheme = configuration.scheme.rawValue
         urlComponents.host = configuration.host
         return urlComponents
     }
@@ -23,7 +23,7 @@ public extension URLComponents {
     
     func with(queryItems: RefdsNetworkQueryItemsProtocol) -> Self {
         var urlComponents = self
-        urlComponents.queryItems = queryItems.value.isEmpty ? nil : queryItems.value
+        urlComponents.queryItems = queryItems.values.isEmpty ? nil : queryItems.values
         return urlComponents
     }
 }

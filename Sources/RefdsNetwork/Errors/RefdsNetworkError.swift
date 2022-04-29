@@ -9,4 +9,5 @@ import Foundation
 
 public enum RefdsNetworkError: Error {
     case invalidURL
+    case finishedWithoutValue
 }

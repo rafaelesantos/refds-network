@@ -8,15 +8,15 @@
 import Foundation
 
 public protocol RefdsNetworkRequestDataProtocol {
-    var body: Data? { get set }
-    var method: RefdsNetworkHTTPMethod { get set }
-    var headers: RefdsNetworkHTTPHeaders { get set }
+    var body: Data? { get }
+    var method: RefdsNetworkHTTPMethod { get }
+    var headers: RefdsNetworkHTTPHeaders { get }
 }
 
 // MARK: Default Values
 
 extension RefdsNetworkRequestDataProtocol {
-    public var body: Data? { get { return nil } }
-    public var method: RefdsNetworkHTTPMethod { get { return .get } }
-    public var headers: RefdsNetworkHTTPHeaders { get { return [.accept(.applicationJson)] } }
+    public var body: Data? { return nil }
+    public var method: RefdsNetworkHTTPMethod { return .get }
+    public var headers: RefdsNetworkHTTPHeaders { return [.accept(.applicationJson)] }
 }

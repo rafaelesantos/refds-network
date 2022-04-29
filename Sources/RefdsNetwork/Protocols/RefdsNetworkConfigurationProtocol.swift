@@ -8,6 +8,6 @@
 import Foundation
 
 public protocol RefdsNetworkConfigurationProtocol {
-    var scheme: String { get set }
+    var scheme: RefdsNetworkScheme { get set }
     var host: String { get set }
 }

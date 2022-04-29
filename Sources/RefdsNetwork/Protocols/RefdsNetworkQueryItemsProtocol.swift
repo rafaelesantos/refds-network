@@ -8,5 +8,5 @@
 import Foundation
 
 public protocol RefdsNetworkQueryItemsProtocol {
-    var value: [URLQueryItem] { get }
+    var values: [URLQueryItem] { get }
 }
