@@ -22,6 +22,9 @@ public protocol RefdsNetworkModelProtocol: Codable {
 @available(iOS 13.0, *)
 @available(macOS 10.15, *)
 extension RefdsNetworkModelProtocol {
+    static var body: Data? = nil
+    static var queryItems: RefdsNetworkQueryItemsProtocol? = nil
+    
     public static func request() -> AnyPublisher<Self, Error> {
         return RefdsNetwork.shared.request(for: serviceConfiguration)
     }
