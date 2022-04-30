@@ -31,8 +31,8 @@ extension RefdsNetworkModelProtocol {
         set { objc_setAssociatedObject(self, &IdentifiableBodyKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
-    public static var queryItems: [URLQueryItem]? {
-        get { return objc_getAssociatedObject(self, &IdentifiableQueryItemsKey) as? [URLQueryItem] }
+    public static var queryItems: [URLQueryItem] {
+        get { return (objc_getAssociatedObject(self, &IdentifiableQueryItemsKey) as? [URLQueryItem]) ?? [] }
         set { objc_setAssociatedObject(self, &IdentifiableQueryItemsKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
