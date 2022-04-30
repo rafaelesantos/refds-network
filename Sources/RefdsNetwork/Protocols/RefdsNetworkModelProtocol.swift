@@ -16,7 +16,7 @@ var IdentifiableQueryItemsKey = "kIdentifiableQueryItemsKey"
 public protocol RefdsNetworkModelProtocol: Codable {
     static var serviceConfiguration: RefdsNetworkServiceConfigurationProtocol { get }
     static var body: Data? { get set }
-    static var queryItems: RefdsNetworkQueryItemsProtocol? { get set }
+    static var queryItems: [URLQueryItem] { get set }
     
     static func request() -> AnyPublisher<Self, Error>
     static func request(completion: @escaping (Result<Self, Error>) -> ())
@@ -31,8 +31,8 @@ extension RefdsNetworkModelProtocol {
         set { objc_setAssociatedObject(self, &IdentifiableBodyKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
-    public static var queryItems: RefdsNetworkQueryItemsProtocol? {
-        get { return objc_getAssociatedObject(self, &IdentifiableQueryItemsKey) as? RefdsNetworkQueryItemsProtocol }
+    public static var queryItems: [URLQueryItem]? {
+        get { return objc_getAssociatedObject(self, &IdentifiableQueryItemsKey) as? [URLQueryItem] }
         set { objc_setAssociatedObject(self, &IdentifiableQueryItemsKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
