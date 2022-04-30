@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol RefdsNetworkRequestDataProtocol {
-    var body: Data? { get set }
+    var body: Data? { get }
     var method: RefdsNetworkHTTPMethod { get }
     var headers: RefdsNetworkHTTPHeaders { get }
 }
