@@ -8,7 +8,7 @@
 import Foundation
 
 extension Encodable {
-    var data: Data? {
+    public var data: Data? {
         return try? JSONEncoder().encode(self)
     }
 }
