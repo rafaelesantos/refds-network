@@ -8,9 +8,6 @@
 import Foundation
 import Combine
 
-var IdentifiableBodyKey = "kIdentifiableBodyKey"
-var IdentifiableQueryItemsKey = "kIdentifiableQueryItemsKey"
-
 @available(iOS 13.0, *)
 @available(macOS 10.15, *)
 public protocol RefdsNetworkModelProtocol: Codable {
@@ -26,16 +23,6 @@ public protocol RefdsNetworkModelProtocol: Codable {
 @available(iOS 13.0, *)
 @available(macOS 10.15, *)
 extension RefdsNetworkModelProtocol {
-    public static var body: Data? {
-        get { return objc_getAssociatedObject(self, &IdentifiableBodyKey) as? Data }
-        set { objc_setAssociatedObject(self, &IdentifiableBodyKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
-    }
-    
-    public static var queryItems: [URLQueryItem] {
-        get { return (objc_getAssociatedObject(self, &IdentifiableQueryItemsKey) as? [URLQueryItem]) ?? [] }
-        set { objc_setAssociatedObject(self, &IdentifiableQueryItemsKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
-    }
-    
     public static func request() -> AnyPublisher<Self, Error> {
         return RefdsNetwork.shared.request(for: serviceConfiguration)
     }
