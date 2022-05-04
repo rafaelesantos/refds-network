@@ -16,17 +16,35 @@ public extension URLSession {
         using requestData: RefdsNetworkRequestDataProtocol,
         on runLoop: RunLoop = .main,
         decoder: JSONDecoder = .init()
-    ) -> AnyPublisher<R, Error> {
+    ) -> AnyPublisher<R, RefdsNetworkError> {
         do {
             let request = try endpoint.setupRequest(with: requestData)
             return dataTaskPublisher(for: request)
                 .receive(on: runLoop)
-                .map(\.data)
+                .tryMap { [weak self] output in
+                    try self?.verifyError(from: output.response)
+                    if output.data.isEmpty { throw RefdsNetworkError.finishedWithoutValue }
+                    return output.data
+                }
                 .decode(type: R.self, decoder: decoder)
+                .mapError { error in
+                    switch error {
+                    case is Swift.DecodingError:
+                        return .decodingFailed
+                    default:
+                        return .unknown(error)
+                    }
+                }
                 .eraseToAnyPublisher()
         } catch {
-            return Fail(error: error)
+            return Fail(error: RefdsNetworkError.invalidURL)
                 .eraseToAnyPublisher()
         }
+    }
+    
+    private func verifyError(from response: URLResponse) throws {
+        guard let response = response as? HTTPURLResponse else { throw RefdsNetworkError.invalidResponse }
+        if response.statusCode != 200 { throw RefdsNetworkError.statusCode(response.statusCode) }
+        
     }
 }

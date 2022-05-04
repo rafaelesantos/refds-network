@@ -15,19 +15,19 @@ public protocol RefdsNetworkModelProtocol: Codable {
     static var body: Data? { get set }
     static var queryItems: [URLQueryItem] { get set }
     
-    static func request() -> AnyPublisher<Self, Error>
-    static func request(completion: @escaping (Result<Self, Error>) -> ())
+    static func request() -> AnyPublisher<Self, RefdsNetworkError>
+    static func request(completion: @escaping (Result<Self, RefdsNetworkError>) -> ())
     static func request() async throws -> Self
 }
 
 @available(iOS 13.0, *)
 @available(macOS 10.15, *)
 extension RefdsNetworkModelProtocol {
-    public static func request() -> AnyPublisher<Self, Error> {
+    public static func request() -> AnyPublisher<Self, RefdsNetworkError> {
         return RefdsNetwork.shared.request(for: serviceConfiguration)
     }
     
-    public static func request(completion: @escaping (Result<Self, Error>) -> ()) {
+    public static func request(completion: @escaping (Result<Self, RefdsNetworkError>) -> ()) {
         return RefdsNetwork.shared.request(for: serviceConfiguration, completion: completion)
     }
     

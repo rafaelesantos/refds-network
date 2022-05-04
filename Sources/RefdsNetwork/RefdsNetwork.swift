@@ -16,16 +16,20 @@ public struct RefdsNetwork {
     private let urlSession = URLSession.shared
     public let configuration = Configuration()
     
-    public func request<R: Decodable>(for service: RefdsNetworkServiceConfigurationProtocol) -> AnyPublisher<R, Error> {
+    public func request<R: Decodable>(for service: RefdsNetworkServiceConfigurationProtocol) -> AnyPublisher<R, RefdsNetworkError> {
         return urlSession.publisher(for: service.endpoint, using: service.requestData)
     }
     
-    public func request<R: Decodable>(for service: RefdsNetworkServiceConfigurationProtocol, completion: @escaping (Result<R, Error>) -> ()) {
+    public func request<R: Decodable>(for service: RefdsNetworkServiceConfigurationProtocol, completion: @escaping (Result<R, RefdsNetworkError>) -> ()) {
         _ = urlSession.publisher(for: service.endpoint, using: service.requestData)
             .sink(receiveCompletion: { result in
+                var finishedWithoutValue = true
                 switch result {
-                case .finished: break
-                case .failure(let error): completion(.failure(error))
+                case .finished:
+                    if finishedWithoutValue { completion(.failure(.finishedWithoutValue)) }
+                case .failure(let error):
+                    finishedWithoutValue = false
+                    completion(.failure(error))
                 }
             }, receiveValue: { completion(.success($0)) })
     }
@@ -46,7 +50,7 @@ extension RefdsNetwork {
         method: RefdsNetworkHTTPMethod,
         headers: RefdsNetworkHTTPHeaders,
         responseType: R.Type
-    ) -> AnyPublisher<R, Error> {
+    ) -> AnyPublisher<R, RefdsNetworkError> {
         let service = configuration.service(
             scheme: scheme,
             host: host,
@@ -67,7 +71,7 @@ extension RefdsNetwork {
         method: RefdsNetworkHTTPMethod,
         headers: RefdsNetworkHTTPHeaders,
         responseType: R.Type,
-        completion: @escaping (Result<R, Error>) -> ()
+        completion: @escaping (Result<R, RefdsNetworkError>) -> ()
     ) {
         let service = configuration.service(
             scheme: scheme,
@@ -81,9 +85,13 @@ extension RefdsNetwork {
         
         _ = urlSession.publisher(for: service.endpoint, using: service.requestData)
             .sink(receiveCompletion: { result in
+                var finishedWithoutValue = true
                 switch result {
-                case .finished: break
-                case .failure(let error): completion(.failure(error))
+                case .finished:
+                    if finishedWithoutValue { completion(.failure(.finishedWithoutValue)) }
+                case .failure(let error):
+                    finishedWithoutValue = false
+                    completion(.failure(error))
                 }
             }, receiveValue: { completion(.success($0)) })
     }
