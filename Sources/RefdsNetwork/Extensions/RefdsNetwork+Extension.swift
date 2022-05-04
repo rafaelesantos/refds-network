@@ -1,17 +1,15 @@
 //
 //  RefdsNetwork+Extension.swift
-//  
+//
 //
 //  Created by Rafael Santos on 29/04/22.
 //
 
-import Foundation
 import Combine
+import Foundation
 
-@available(iOS 13.0, *)
-@available(macOS 10.15, *)
-extension RefdsNetwork.Configuration {
-    public func base(
+public extension RefdsNetwork.Configuration {
+    func base(
         scheme: RefdsNetworkScheme,
         host: String
     ) -> RefdsNetworkBaseProtocol {
@@ -20,20 +18,20 @@ extension RefdsNetwork.Configuration {
             host: host
         )
     }
-    
-    public func path(value: String) -> RefdsNetworkPathProtocol {
+
+    func path(value: String) -> RefdsNetworkPathProtocol {
         return Path(value: value)
     }
-    
-    public func queryItems(values: [URLQueryItem] = []) -> RefdsNetworkQueryItemsProtocol {
+
+    func queryItems(values: [URLQueryItem] = []) -> RefdsNetworkQueryItemsProtocol {
         return QueryItems(values: values)
     }
-    
-    public func endpoint<R: Decodable>(
+
+    func endpoint<R: Decodable>(
         base: RefdsNetworkBaseProtocol,
         path: RefdsNetworkPathProtocol,
         queryItems: RefdsNetworkQueryItemsProtocol,
-        _ type: R.Type
+        _: R.Type
     ) -> RefdsNetworkEndpointProtocol {
         return Endpoint<R>(
             base: base,
@@ -41,8 +39,8 @@ extension RefdsNetwork.Configuration {
             queryItems: queryItems
         )
     }
-    
-    public func requestData(
+
+    func requestData(
         body: Data? = nil,
         method: RefdsNetworkHTTPMethod,
         headers: RefdsNetworkHTTPHeaders
@@ -53,8 +51,8 @@ extension RefdsNetwork.Configuration {
             headers: headers
         )
     }
-    
-    public func service(
+
+    func service(
         endpoint: RefdsNetworkEndpointProtocol,
         requestData: RefdsNetworkRequestDataProtocol
     ) -> RefdsNetworkServiceConfigurationProtocol {
@@ -63,22 +61,22 @@ extension RefdsNetwork.Configuration {
             requestData: requestData
         )
     }
-    
-    func service<R: Decodable>(
+
+    internal func service<R: Decodable>(
         scheme: RefdsNetworkScheme = .https,
         host: String,
         path: String,
         queryItems: [URLQueryItem] = [],
         method: RefdsNetworkHTTPMethod,
         headers: RefdsNetworkHTTPHeaders,
-        responseType: R.Type
+        responseType _: R.Type
     ) -> RefdsNetworkServiceConfigurationProtocol {
         let base = Base(scheme: scheme, host: host)
         let path = Path(value: path)
         let queryItems = QueryItems(values: queryItems)
         let endpoint = Endpoint<R>(base: base, path: path, queryItems: queryItems)
         let requestData = RequestData(method: method, headers: headers)
-        
+
         return ServiceConfiguration(endpoint: endpoint, requestData: requestData)
     }
 }
@@ -92,27 +90,27 @@ extension RefdsNetwork.Configuration {
         var scheme: RefdsNetworkScheme
         var host: String
     }
-    
+
     private struct Path: RefdsNetworkPathProtocol {
         var value: String
     }
-    
+
     private struct QueryItems: RefdsNetworkQueryItemsProtocol {
         var values: [URLQueryItem]
     }
-    
+
     private struct RequestData: RefdsNetworkRequestDataProtocol {
         var body: Data?
         var method: RefdsNetworkHTTPMethod
         var headers: RefdsNetworkHTTPHeaders
     }
-    
+
     private struct Endpoint<Response: Decodable>: RefdsNetworkEndpointProtocol {
         var base: RefdsNetworkBaseProtocol
         var path: RefdsNetworkPathProtocol
         var queryItems: RefdsNetworkQueryItemsProtocol
     }
-    
+
     private struct ServiceConfiguration: RefdsNetworkServiceConfigurationProtocol {
         var endpoint: RefdsNetworkEndpointProtocol
         var requestData: RefdsNetworkRequestDataProtocol

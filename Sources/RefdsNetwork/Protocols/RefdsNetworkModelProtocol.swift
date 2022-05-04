@@ -1,37 +1,35 @@
 //
 //  RefdsNetworkModelProtocol.swift
-//  
+//
 //
 //  Created by Rafael Santos on 27/04/22.
 //
 
-import Foundation
 import Combine
+import Foundation
 
-@available(iOS 13.0, *)
-@available(macOS 10.15, *)
 public protocol RefdsNetworkModelProtocol: Codable {
     static var serviceConfiguration: RefdsNetworkServiceConfigurationProtocol { get }
     static var body: Data? { get set }
     static var queryItems: [URLQueryItem] { get set }
-    
+
     static func request() -> AnyPublisher<Self, RefdsNetworkError>
-    static func request(completion: @escaping (Result<Self, RefdsNetworkError>) -> ())
+    static func request(completion: @escaping (Result<Self, RefdsNetworkError>) -> Void)
     static func request() async throws -> Self
 }
 
 @available(iOS 13.0, *)
 @available(macOS 10.15, *)
-extension RefdsNetworkModelProtocol {
-    public static func request() -> AnyPublisher<Self, RefdsNetworkError> {
+public extension RefdsNetworkModelProtocol {
+    static func request() -> AnyPublisher<Self, RefdsNetworkError> {
         return RefdsNetwork.shared.request(for: serviceConfiguration)
     }
-    
-    public static func request(completion: @escaping (Result<Self, RefdsNetworkError>) -> ()) {
+
+    static func request(completion: @escaping (Result<Self, RefdsNetworkError>) -> Void) {
         return RefdsNetwork.shared.request(for: serviceConfiguration, completion: completion)
     }
-    
-    public static func request() async throws -> Self {
+
+    static func request() async throws -> Self {
         return try await RefdsNetwork.shared.request(for: serviceConfiguration)
     }
 }

@@ -1,15 +1,13 @@
 //
 //  URLSession+Extension.swift
-//  
+//
 //
 //  Created by Rafael Santos on 26/04/22.
 //
 
-import Foundation
 import Combine
+import Foundation
 
-@available(iOS 13.0, *)
-@available(macOS 10.15, *)
 public extension URLSession {
     func publisher<R: Decodable>(
         for endpoint: RefdsNetworkEndpointProtocol,
@@ -23,7 +21,10 @@ public extension URLSession {
                 .receive(on: runLoop)
                 .tryMap { [weak self] output in
                     try self?.verifyError(from: output.response)
-                    if output.data.isEmpty { throw RefdsNetworkError.finishedWithoutValue }
+                    if output.data.isEmpty {
+                        throw RefdsNetworkError.finishedWithoutValue
+                    }
+
                     return output.data
                 }
                 .decode(type: R.self, decoder: decoder)
@@ -41,10 +42,14 @@ public extension URLSession {
                 .eraseToAnyPublisher()
         }
     }
-    
+
     private func verifyError(from response: URLResponse) throws {
-        guard let response = response as? HTTPURLResponse else { throw RefdsNetworkError.invalidResponse }
-        if response.statusCode != 200 { throw RefdsNetworkError.statusCode(response.statusCode) }
-        
+        guard let response = response as? HTTPURLResponse else {
+            throw RefdsNetworkError.invalidResponse
+        }
+
+        if response.statusCode != 200 {
+            throw RefdsNetworkError.statusCode(response.statusCode)
+        }
     }
 }

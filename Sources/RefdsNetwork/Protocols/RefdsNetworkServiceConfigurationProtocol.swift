@@ -1,6 +1,6 @@
 //
 //  RefdsNetworkServiceConfigurationProtocol.swift
-//  
+//
 //
 //  Created by Rafael Santos on 29/04/22.
 //

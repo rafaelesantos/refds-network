@@ -1,6 +1,6 @@
 //
 //  RefdsNetworkRequestDataProtocol.swift
-//  
+//
 //
 //  Created by Rafael Santos on 27/04/22.
 //
@@ -15,8 +15,8 @@ public protocol RefdsNetworkRequestDataProtocol {
 
 // MARK: Default Values
 
-extension RefdsNetworkRequestDataProtocol {
-    public var body: Data? { return nil }
-    public var method: RefdsNetworkHTTPMethod { return .get }
-    public var headers: RefdsNetworkHTTPHeaders { return [.accept(.applicationJson)] }
+public extension RefdsNetworkRequestDataProtocol {
+    var body: Data? { return nil }
+    var method: RefdsNetworkHTTPMethod { return .get }
+    var headers: RefdsNetworkHTTPHeaders { return [.accept(.applicationJson)] }
 }

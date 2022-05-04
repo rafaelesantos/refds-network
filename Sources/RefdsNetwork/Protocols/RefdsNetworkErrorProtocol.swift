@@ -1,6 +1,6 @@
 //
 //  RefdsNetworkErrorProtocol.swift
-//  
+//
 //
 //  Created by Rafael Santos on 04/05/22.
 //
