@@ -1,10 +1,3 @@
-//
-//  RefdsNetwork+Extension.swift
-//
-//
-//  Created by Rafael Santos on 29/04/22.
-//
-
 import Combine
 import Foundation
 
@@ -83,8 +76,6 @@ public extension RefdsNetwork.Configuration {
 
 // MARK: Structs Based On Protocols
 
-@available(iOS 13.0, *)
-@available(macOS 10.15, *)
 extension RefdsNetwork.Configuration {
     private struct Base: RefdsNetworkBaseProtocol {
         var scheme: RefdsNetworkScheme

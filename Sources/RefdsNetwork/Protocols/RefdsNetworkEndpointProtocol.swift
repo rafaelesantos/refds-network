@@ -1,10 +1,3 @@
-//
-//  RefdsNetworkEndpointProtocol.swift
-//
-//
-//  Created by Rafael Santos on 26/04/22.
-//
-
 import Foundation
 
 public protocol RefdsNetworkEndpointProtocol {

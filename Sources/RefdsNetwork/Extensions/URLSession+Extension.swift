@@ -1,15 +1,24 @@
-//
-//  URLSession+Extension.swift
-//
-//
-//  Created by Rafael Santos on 26/04/22.
-//
-
 import Combine
 import Foundation
 
 public extension URLSession {
     func publisher<R: Decodable>(
+        for endpoint: RefdsNetworkEndpointProtocol,
+        using requestData: RefdsNetworkRequestDataProtocol,
+        on runLoop: RunLoop = .main,
+        decoder: JSONDecoder = .init()
+    ) -> AnyPublisher<R, RefdsNetworkError> {
+        return restRequest(
+            for: endpoint,
+            using: requestData,
+            on: runLoop,
+            decoder: decoder
+        )
+    }
+}
+
+public extension URLSession {
+    private func restRequest<R: Decodable>(
         for endpoint: RefdsNetworkEndpointProtocol,
         using requestData: RefdsNetworkRequestDataProtocol,
         on runLoop: RunLoop = .main,
@@ -21,6 +30,7 @@ public extension URLSession {
                 .receive(on: runLoop)
                 .tryMap { [weak self] output in
                     try self?.verifyError(from: output.response)
+                    
                     if output.data.isEmpty {
                         throw RefdsNetworkError.finishedWithoutValue
                     }
@@ -37,19 +47,28 @@ public extension URLSession {
                     }
                 }
                 .eraseToAnyPublisher()
-        } catch {
+        } catch RefdsNetworkError.invalidURL {
             return Fail(error: RefdsNetworkError.invalidURL)
+                .eraseToAnyPublisher()
+        } catch {
+            return Fail(error: RefdsNetworkError.unknown(error))
                 .eraseToAnyPublisher()
         }
     }
+}
 
+public extension URLSession {
     private func verifyError(from response: URLResponse) throws {
         guard let response = response as? HTTPURLResponse else {
             throw RefdsNetworkError.invalidResponse
         }
 
-        if response.statusCode != 200 {
+        if response.statusCode / 100 != 2 {
             throw RefdsNetworkError.statusCode(response.statusCode)
         }
+    }
+    
+    private func isRest(for scheme: RefdsNetworkScheme) -> Bool {
+        return scheme == .https || scheme == .http
     }
 }

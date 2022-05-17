@@ -1,9 +1,3 @@
-//
-//  RefdsNetwork.swift
-//
-//
-//  Created by Rafael Santos on 26/04/22.
-//
 import Combine
 import Foundation
 

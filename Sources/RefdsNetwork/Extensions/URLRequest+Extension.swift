@@ -1,10 +1,3 @@
-//
-//  URLRequest+Extension.swift
-//
-//
-//  Created by Rafael Santos on 27/04/22.
-//
-
 import Foundation
 
 public extension URLRequest {
