@@ -1,7 +1,7 @@
 import Combine
 import Foundation
 
-public extension RefdsNetwork.Configuration {
+public struct RefdsNetworkConfiguration {
     func base(
         scheme: RefdsNetworkScheme,
         host: String
@@ -76,7 +76,7 @@ public extension RefdsNetwork.Configuration {
 
 // MARK: Structs Based On Protocols
 
-extension RefdsNetwork.Configuration {
+extension RefdsNetworkConfiguration {
     private struct Base: RefdsNetworkBaseProtocol {
         var scheme: RefdsNetworkScheme
         var host: String

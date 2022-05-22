@@ -2,11 +2,9 @@ import Combine
 import Foundation
 
 public struct RefdsNetwork {
-    public struct Configuration {}
-
     public static let shared = RefdsNetwork()
     private let urlSession = URLSession.shared
-    public let configuration = Configuration()
+    public let configuration = RefdsNetworkConfiguration()
 
     public func request<R: Decodable>(
         for service: RefdsNetworkServiceConfigurationProtocol
