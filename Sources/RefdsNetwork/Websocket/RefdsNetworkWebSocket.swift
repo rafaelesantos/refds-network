@@ -31,7 +31,7 @@ final class RefdsNetworkWebSocket<T: Codable>: Publisher, Subscriber {
         case .message(let string):
             message = URLSessionWebSocketTask.Message.string(string)
         case .codable(let codable):
-            guard let data = try? JSONEncoder().encode(codable) else {  }
+            guard let data = try? JSONEncoder().encode(codable) else { return .unlimited }
             message = URLSessionWebSocketTask.Message.data(data)
         case .uncodable(let data):
             message = URLSessionWebSocketTask.Message.data(data)
