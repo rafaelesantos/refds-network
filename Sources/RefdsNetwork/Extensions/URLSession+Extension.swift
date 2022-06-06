@@ -2,6 +2,22 @@ import Combine
 import Foundation
 
 public extension URLSession {
+    /**
+     Make a request with publisher to observe response value
+     
+     - Parameters:
+        - endpoint: A protocol of type `RefdsNetworkEndpointProtocol`
+        - requestData: A protocol of type `RefdsNetworkRequestDataProtocol`
+        - runLoop: Thread to execute request
+        - decoder: Instnce of JSONDecoder
+     - Returns: AnyPublisher with result of request
+     - Precondition: Type of `R` is `Decodable`
+     
+     ```
+     let r: R = publisher(for: endpoint, using: requestData, on: .main, decoder: JSONDecoder())
+     r.sink(receiveCompletion: { _ in }, receiveValue: { })
+     ```
+     */
     func publisher<R: Decodable>(
         for endpoint: RefdsNetworkEndpointProtocol,
         using requestData: RefdsNetworkRequestDataProtocol,

@@ -1,7 +1,13 @@
 import Combine
 import Foundation
 
-extension AnyPublisher {
+public extension AnyPublisher {
+    /**
+     Convert to asynchronous call without observer
+     - Returns: A response that needs to wait to be processed
+     - Throws:`RefdsNetworkError.finishedWithoutValue`
+                if `finishedWithoutValue` is true
+     */
     func async() async throws -> Output {
         try await withCheckedThrowingContinuation { continuation in
             var finishedWithoutValue = true
