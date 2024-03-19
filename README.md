@@ -1,9 +1,16 @@
-# Product Name
-> Short blurb about what your product does.
+# Refds Network
 
-One to two paragraph statement about your product and what it does.
+Refds Network is a Swift Package Manager library that provides a simple and elegant way to perform HTTP and WebSocket requests in Swift applications, inspired by libraries like Alamofire.
 
-![](header.png)
+## Features
+
+- [x] HTTP requests: GET, POST, PUT, DELETE, etc.
+- [x] Support for custom headers.
+- [x] Support for query parameters.
+- [x] WebSocket requests for real-time communication.
+- [x] Easy JSON handling with Codable.
+- [x] Asynchronous operations and callbacks for response handling.
+- [x] Compatible with iOS, macOS, tvOS, and watchOS.
 
 ## Installation
 
@@ -14,23 +21,16 @@ import PackageDescription
 
 let package = Package(
     dependencies: [
-        .package(url: "https://github.com/rafaelesantos/.git", branch: "main")
+        .package(url: "https://github.com/rafaelesantos/refds-network.git", branch: "main")
     ],
     targets: [
         .target(
             name: "YourProject",
             dependencies: [
                 .product(
-                    name: "",
-                    package: ""),
+                    name: "RefdsNetwork",
+                    package: "refds-network"),
             ]),
     ]
 )
-```
-
-## Usage example
-
-
-```swift
-
 ```
