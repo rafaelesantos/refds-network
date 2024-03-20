@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "refds-shared",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/rafaelesantos/refds-shared.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "666d3ca7137f41e6d79396be3dac18e5d392b5d9"
+      }
+    }
+  ],
+  "version" : 2
+}
