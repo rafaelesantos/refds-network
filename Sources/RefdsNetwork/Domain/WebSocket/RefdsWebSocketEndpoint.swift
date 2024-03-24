@@ -2,12 +2,12 @@ import Foundation
 import RefdsShared
 
 public protocol RefdsWebSocketEndpoint: RefdsLogger {
-    var scheme: RefdsWebSocketScheme { get set }
-    var host: String { get set }
-    var path: String { get set }
-    var queryItems: [URLQueryItem]? { get set }
-    var headers: [RefdsHttpHeader]? { get set }
-    var body: Data? { get set }
+    var scheme: RefdsWebSocketScheme { get }
+    var host: String { get }
+    var path: String { get }
+    var queryItems: [URLQueryItem]? { get }
+    var headers: [RefdsHttpHeader]? { get }
+    var body: Data? { get }
 }
 
 extension RefdsWebSocketEndpoint {
