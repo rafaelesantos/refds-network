@@ -12,6 +12,11 @@ public protocol RefdsHttpEndpoint: RefdsLogger {
 }
 
 extension RefdsHttpEndpoint {
+    public var queryItems: [URLQueryItem]? { nil }
+    public var headers: [RefdsHttpHeader]? { nil }
+    public var body: Data? { nil }
+    public var url: URL? { urlComponents.url }
+    
     public var urlComponents: URLComponents {
         var  urlComponents = URLComponents()
         urlComponents.scheme = scheme.rawValue
@@ -29,8 +34,6 @@ extension RefdsHttpEndpoint {
         urlRequest.httpBody = body
         return urlRequest
     }
-    
-    public var url: URL? { urlComponents.url }
     
     public func logger() {
         guard let url = url else { return }
