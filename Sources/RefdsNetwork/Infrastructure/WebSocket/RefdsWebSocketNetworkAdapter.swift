@@ -38,7 +38,8 @@ public class RefdsWebSocketNetworkAdapter: NSObject, RefdsWebSocketClient {
         request: Request,
         repeats: Bool = false
     ) -> Self where Request : RefdsWebSocketRequest {
-        guard let url = request.webSocketEndpoint.url else {
+        guard let webSocketEndpoint = request.webSocketEndpoint,
+              let url = webSocketEndpoint.url else {
             let error = RefdsWebSocketError.invalidUrl
             currentRequestData?.logger()
             error.logger()
