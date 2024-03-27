@@ -3,8 +3,8 @@ import Foundation
 public protocol RefdsWebSocketRequest {
     associatedtype Response
     
-    var webSocketClient: RefdsWebSocketClient { get set }
-    var webSocketEndpoint: RefdsWebSocketEndpoint { get set }
+    var webSocketClient: RefdsWebSocketClient { get }
+    var webSocketEndpoint: RefdsWebSocketEndpoint? { get }
     
     func decode(_ data: Data) throws -> Response
 }
