@@ -11,15 +11,16 @@ public class RefdsHttpNetworkAdapter: RefdsHttpClient {
         _ request: Request,
         completion: @escaping (Result<Request.Response, RefdsHttpError>) -> Void
     ) where Request : RefdsHttpRequest {
-        guard let url = request.httpEndpoint.url else {
+        guard let httpEndpoint = request.httpEndpoint,
+              let url = httpEndpoint.url else {
             let error = RefdsHttpError.invalidUrl
             error.logger()
             return completion(.failure(error))
         }
         
-        var urlRequest = request.httpEndpoint.urlRequest(url: url)
-        urlRequest.httpMethod = request.httpEndpoint.method.rawValue
-        urlRequest.httpBody = request.httpEndpoint.body
+        var urlRequest = httpEndpoint.urlRequest(url: url)
+        urlRequest.httpMethod = httpEndpoint.method.rawValue
+        urlRequest.httpBody = httpEndpoint.body
         
         session.dataTask(with: urlRequest) { data, response, error in
             guard let data = data, let response = response, error == nil else {
@@ -34,7 +35,7 @@ public class RefdsHttpNetworkAdapter: RefdsHttpClient {
                 return completion(.failure(error))
             }
             
-            guard let decoded = try? request.decode(data, endpoint: request.httpEndpoint) else {
+            guard let decoded = try? request.decode(data) else {
                 let error = self.handleError(url, statusCode: statusCode)
                 error.logger()
                 return completion(.failure(error))
