@@ -6,7 +6,7 @@ public protocol RefdsHttpEndpoint: RefdsLogger {
     var host: String { get }
     var path: String { get }
     var method: RefdsHttpMethod { get }
-    var queryItems: [URLQueryItem]? { get }
+    var queryItems: [URLQueryItem]? { get set }
     var headers: [RefdsHttpHeader]? { get set }
     var body: Data? { get set }
 }
