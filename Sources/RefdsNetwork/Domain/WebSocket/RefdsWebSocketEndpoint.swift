@@ -5,9 +5,9 @@ public protocol RefdsWebSocketEndpoint: RefdsLogger {
     var scheme: RefdsWebSocketScheme { get }
     var host: String { get }
     var path: String { get }
-    var queryItems: [URLQueryItem]? { get }
-    var headers: [RefdsHttpHeader]? { get }
-    var body: Data? { get }
+    var queryItems: [URLQueryItem]? { get set }
+    var headers: [RefdsHttpHeader]? { get set }
+    var body: Data? { get set }
 }
 
 extension RefdsWebSocketEndpoint {
