@@ -7,7 +7,7 @@ public protocol RefdsHttpEndpoint: RefdsLogger {
     var path: String { get }
     var method: RefdsHttpMethod { get }
     var queryItems: [URLQueryItem]? { get }
-    var headers: [RefdsHttpHeader]? { get }
+    var headers: [RefdsHttpHeader]? { get set }
     var body: Data? { get set }
 }
 
