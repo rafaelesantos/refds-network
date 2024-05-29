@@ -23,25 +23,28 @@ public class RefdsHttpNetworkAdapter: RefdsHttpClient {
         urlRequest.httpBody = httpEndpoint.body
         
         session.dataTask(with: urlRequest) { data, response, error in
+            let result: Result<Request.Response, RefdsHttpError>
+            defer { completion(result) }
+            
             guard let data = data, let response = response, error == nil else {
                 let error = RefdsHttpError.noConnectivity(statusCode: 0, url: url)
                 error.logger()
-                return completion(.failure(error))
+                return result = .failure(error)
             }
             
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
                 let error = RefdsHttpError.noConnectivity(statusCode: 0, url: url)
                 error.logger()
-                return completion(.failure(error))
+                return result = .failure(error)
             }
             
             guard let decoded = try? request.decode(data) else {
                 let error = self.handleError(url, statusCode: statusCode)
                 error.logger()
-                return completion(.failure(error))
+                return result = .failure(error)
             }
             
-            completion(.success(decoded))
+            result = .success(decoded)
         }.resume()
     }
     
