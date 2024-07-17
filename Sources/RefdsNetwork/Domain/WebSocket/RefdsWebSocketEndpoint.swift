@@ -34,6 +34,6 @@ extension RefdsWebSocketEndpoint {
         if let body = body, let bodyString = String(data: body, encoding: .utf8) {
             message += "\n\t BODY \(bodyString.replacingOccurrences(of: "\n", with: "\n\t\t"))"
         }
-        loggerInstance.info(message: message)
+        Self.loggerInstance.info(message: message)
     }
 }

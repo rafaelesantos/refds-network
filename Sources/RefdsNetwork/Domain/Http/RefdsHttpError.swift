@@ -25,6 +25,6 @@ public enum RefdsHttpError: Error, CustomStringConvertible {
 
 extension RefdsHttpError: RefdsLogger {
     public func logger() {
-        loggerInstance.error(message: description)
+        Self.loggerInstance.error(message: description)
     }
 }

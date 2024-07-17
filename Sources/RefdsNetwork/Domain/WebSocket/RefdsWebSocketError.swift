@@ -17,6 +17,6 @@ public enum RefdsWebSocketError: Error, CustomStringConvertible {
 
 extension RefdsWebSocketError: RefdsLogger {
     public func logger() {
-        loggerInstance.error(message: description)
+        Self.loggerInstance.error(message: description)
     }
 }
