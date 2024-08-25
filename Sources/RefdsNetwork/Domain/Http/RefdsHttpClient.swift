@@ -1,8 +1,9 @@
 import Foundation
+import RefdsShared
 
 public protocol RefdsHttpClient {
     func request<Request: RefdsHttpRequest>(
         _ request: Request,
-        completion: @escaping (Result<Request.Response, RefdsHttpError>) -> Void
+        completion: @escaping (RefdsResult<Request.Response>) -> Void
     )
 }
