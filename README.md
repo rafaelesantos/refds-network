@@ -1,8 +1,8 @@
-# Refds Network
+# 📬 Refds Network
 
 [![CI](https://github.com/rafaelesantos/refds-network/actions/workflows/swift.yml/badge.svg)](https://github.com/rafaelesantos/refds-network/actions/workflows/swift.yml)
 
-Refds Network is a Swift Package Manager library that provides a simple and elegant way to perform HTTP and WebSocket requests in Swift applications, inspired by libraries like Alamofire.
+RefdsNetwork is a Swift Package Manager library that provides a simple and elegant way to perform HTTP and WebSocket requests in Swift applications, inspired by libraries like Alamofire.
 
 ## Features
 
