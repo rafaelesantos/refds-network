@@ -1,4 +1,5 @@
 import Foundation
+import RefdsShared
 
 public class RefdsHttpNetworkAdapter: RefdsHttpClient {
     private let session: URLSession
@@ -9,13 +10,13 @@ public class RefdsHttpNetworkAdapter: RefdsHttpClient {
     
     public func request<Request>(
         _ request: Request,
-        completion: @escaping (Result<Request.Response, RefdsHttpError>) -> Void
+        completion: @escaping (RefdsResult<Request.Response>) -> Void
     ) where Request : RefdsHttpRequest {
         guard let httpEndpoint = request.httpEndpoint,
               let url = httpEndpoint.url else {
             let error = RefdsHttpError.invalidUrl
             error.logger()
-            return completion(.failure(error))
+            return completion(.failure(.requestError(error: error)))
         }
         
         var urlRequest = httpEndpoint.urlRequest(url: url)
@@ -23,25 +24,25 @@ public class RefdsHttpNetworkAdapter: RefdsHttpClient {
         urlRequest.httpBody = httpEndpoint.body
         
         session.dataTask(with: urlRequest) { data, response, error in
-            let result: Result<Request.Response, RefdsHttpError>
+            let result: RefdsResult<Request.Response>
             defer { completion(result) }
             
             guard let data = data, let response = response, error == nil else {
                 let error = RefdsHttpError.noConnectivity(statusCode: 0, url: url)
                 error.logger()
-                return result = .failure(error)
+                return result = .failure(.requestError(error: error))
             }
             
             guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
                 let error = RefdsHttpError.noConnectivity(statusCode: 0, url: url)
                 error.logger()
-                return result = .failure(error)
+                return result = .failure(.requestError(error: error))
             }
             
             guard let decoded = try? request.decode(data) else {
                 let error = self.handleError(url, statusCode: statusCode)
                 error.logger()
-                return result = .failure(error)
+                return result = .failure(.requestError(error: error))
             }
             
             result = .success(decoded)
