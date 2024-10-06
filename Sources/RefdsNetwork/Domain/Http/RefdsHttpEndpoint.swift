@@ -26,7 +26,7 @@ extension RefdsHttpEndpoint {
         return urlComponents
     }
     
-    public func urlRequest(url: URL) -> URLRequest {
+    public func request(url: URL) -> URLRequest {
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = method.rawValue
         urlRequest.allHTTPHeaderFields = headers?.asDictionary

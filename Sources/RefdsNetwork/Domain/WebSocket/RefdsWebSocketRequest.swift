@@ -1,17 +1,23 @@
 import Foundation
 
 public protocol RefdsWebSocketRequest {
-    associatedtype Response
+    var client: RefdsWebSocketClient { get }
+    var endpoint: RefdsWebSocketEndpoint? { get }
     
-    var webSocketClient: RefdsWebSocketClient { get }
-    var webSocketEndpoint: RefdsWebSocketEndpoint? { get }
-    
-    func decode(_ data: Data) throws -> Response
+    func decode<Decoded: Codable>(
+        _ data: Data,
+        type: Decoded.Type
+    ) throws -> Decoded
 }
 
-public extension RefdsWebSocketRequest where Response: Decodable {
-    func decode(_ data: Data) throws -> Response {
-        guard let decoded: Response = data.asModel() else { throw RefdsWebSocketError.invalidResponse(content: data) }
+public extension RefdsWebSocketRequest {
+    func decode<Decoded: Codable>(
+        _ data: Data,
+        type: Decoded.Type
+    ) throws -> Decoded {
+        guard let decoded: Decoded = data.asModel() else {
+            throw RefdsWebSocketError.invalidResponse(content: data)
+        }
         return decoded
     }
 }

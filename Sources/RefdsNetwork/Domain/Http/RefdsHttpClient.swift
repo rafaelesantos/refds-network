@@ -2,8 +2,8 @@ import Foundation
 import RefdsShared
 
 public protocol RefdsHttpClient {
-    func request<Request: RefdsHttpRequest>(
-        _ request: Request,
-        completion: @escaping (RefdsResult<Request.Response>) -> Void
-    )
+    func request<Request: RefdsHttpRequest, Response: Codable>(
+        with request: Request,
+        type: Response.Type
+    ) async throws -> Response
 }
