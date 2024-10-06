@@ -22,7 +22,7 @@ public enum RefdsWebSocketError: Error, CustomStringConvertible {
 }
 
 extension RefdsWebSocketError: RefdsLogger {
-    public func logger() {
-        Self.loggerInstance.error(message: description)
+    public func logger() async {
+        await Self.loggerInstance.error(message: description)
     }
 }

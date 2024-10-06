@@ -1,26 +1,25 @@
 import Foundation
 import RefdsShared
 
-public protocol RefdsHttpRequest {
+public protocol RefdsHttpRequest: Sendable {
     var client: RefdsHttpClient { get }
     var endpoint: RefdsHttpEndpoint? { get }
     
-    func decode<Decoded: Codable>(
+    func decode<Decoded: RefdsModel>(
         _ data: Data,
         type: Decoded.Type
-    ) throws -> Decoded
+    ) async throws -> Decoded
 }
 
 public extension RefdsHttpRequest {
-    func decode<Decoded: Codable>(
+    func decode<Decoded: RefdsModel>(
         _ data: Data,
         type: Decoded.Type
-    ) throws -> Decoded {
+    ) async throws -> Decoded {
         guard let decoded: Decoded = data.asModel() else {
             throw RefdsHttpError.invalidResponse(content: data)
         }
-        endpoint?.logger()
-        RefdsLoggerSystem.shared.info(message: decoded.json.content)
+        await decoded.logger()
         return decoded
     }
 }

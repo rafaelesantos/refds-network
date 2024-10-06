@@ -2,7 +2,7 @@ import Foundation
 import RefdsShared
 
 public protocol RefdsWebSocketClient {
-    func send<Value: Encodable>(
+    func send<Value: RefdsModel>(
         value: Value,
         type: Value.Type
     ) async throws

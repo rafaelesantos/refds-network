@@ -13,11 +13,11 @@ public actor RefdsWebSocketNetworkAdapter: RefdsWebSocketClient {
         guard let endpoint = request.endpoint,
               let url = endpoint.url else {
             let error = RefdsWebSocketError.invalidUrl
-            error.logger()
+            await error.logger()
             throw error
         }
         
-        endpoint.logger()
+        await endpoint.logger()
         webSocketTask = session.webSocketTask(with: url)
         webSocketTask?.resume()
         
@@ -41,14 +41,14 @@ public actor RefdsWebSocketNetworkAdapter: RefdsWebSocketClient {
         }
     }
     
-    public func send<Value: Encodable>(
+    public func send<Value: RefdsModel>(
         value: Value,
         type: Value.Type
     ) async throws {
         let encoded = value.json
         guard encoded.success else {
             let error = RefdsWebSocketError.invalidSendData
-            error.logger()
+            await error.logger()
             throw error
         }
         try await webSocketTask?.send(.string(encoded.content))
@@ -62,13 +62,13 @@ public actor RefdsWebSocketNetworkAdapter: RefdsWebSocketClient {
         case .string(let string):
             guard let data = string.data(using: .utf8) else {
                 let error = RefdsWebSocketError.decoded
-                error.logger()
+                await error.logger()
                 throw error
             }
             return data
         default:
             let error = RefdsWebSocketError.invalidReceiveData
-            error.logger()
+            await error.logger()
             throw error
         }
     }

@@ -1,20 +1,21 @@
 import Foundation
+import RefdsShared
 
-public protocol RefdsWebSocketRequest {
+public protocol RefdsWebSocketRequest: Sendable {
     var client: RefdsWebSocketClient { get }
     var endpoint: RefdsWebSocketEndpoint? { get }
     
-    func decode<Decoded: Codable>(
+    func decode<Decoded: RefdsModel>(
         _ data: Data,
         type: Decoded.Type
-    ) throws -> Decoded
+    ) async throws -> Decoded
 }
 
 public extension RefdsWebSocketRequest {
-    func decode<Decoded: Codable>(
+    func decode<Decoded: RefdsModel>(
         _ data: Data,
         type: Decoded.Type
-    ) throws -> Decoded {
+    ) async throws -> Decoded {
         guard let decoded: Decoded = data.asModel() else {
             throw RefdsWebSocketError.invalidResponse(content: data)
         }

@@ -25,7 +25,7 @@ extension RefdsWebSocketEndpoint {
         return urlComponents
     }
     
-    public func logger() {
+    public func logger() async {
         guard let url = url else { return }
         var message = "\t ENDPOINT - \(url)"
         if let headers = headers {
@@ -34,6 +34,6 @@ extension RefdsWebSocketEndpoint {
         if let body = body, let bodyString = String(data: body, encoding: .utf8) {
             message += "\n\t BODY \(bodyString.replacingOccurrences(of: "\n", with: "\n\t\t"))"
         }
-        Self.loggerInstance.info(message: message)
+        await Self.loggerInstance.info(message: message)
     }
 }
