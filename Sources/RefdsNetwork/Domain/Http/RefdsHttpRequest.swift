@@ -2,8 +2,8 @@ import Foundation
 import RefdsShared
 
 public protocol RefdsHttpRequest: Sendable {
-    var client: RefdsHttpClient { get }
-    var endpoint: RefdsHttpEndpoint? { get }
+    var client: RefdsHttpClient { get async }
+    var endpoint: RefdsHttpEndpoint? { get async }
     
     func decode<Decoded: RefdsModel>(
         _ data: Data,

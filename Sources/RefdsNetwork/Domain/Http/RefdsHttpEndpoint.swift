@@ -1,7 +1,7 @@
 import Foundation
 import RefdsShared
 
-public protocol RefdsHttpEndpoint: RefdsLogger {
+public protocol RefdsHttpEndpoint: RefdsLogger, Sendable {
     var scheme: RefdsHttpScheme { get }
     var host: String { get }
     var path: String { get }

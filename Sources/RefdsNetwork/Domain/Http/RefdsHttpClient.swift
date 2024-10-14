@@ -1,7 +1,7 @@
 import Foundation
 import RefdsShared
 
-public protocol RefdsHttpClient {
+public protocol RefdsHttpClient: Sendable {
     func request<Request: RefdsHttpRequest, Response: RefdsModel>(
         with request: Request,
         type: Response.Type

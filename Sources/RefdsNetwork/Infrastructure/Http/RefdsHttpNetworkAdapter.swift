@@ -12,7 +12,7 @@ public actor RefdsHttpNetworkAdapter: RefdsHttpClient {
         with request: Request,
         type: Response.Type
     ) async throws -> Response {
-        guard let endpoint = request.endpoint,
+        guard let endpoint = await request.endpoint,
               let url = endpoint.url else {
             let error = RefdsHttpError.invalidUrl
             await error.logger()
