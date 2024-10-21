@@ -13,14 +13,14 @@ public actor RefdsHttpNetworkAdapter: RefdsHttpClient {
         type: Response.Type
     ) async throws -> Response {
         guard let endpoint = await request.endpoint,
-              let url = endpoint.url else {
+              let url = await endpoint.url else {
             let error = RefdsHttpError.invalidUrl
             await error.logger()
             throw RefdsError.requestError(error: error)
         }
         
         await endpoint.logger()
-        let urlRequest = endpoint.request(url: url)
+        let urlRequest = await endpoint.request(url: url)
         let result = try await session.data(for: urlRequest)
         
         return try await request.decode(result.0, type: type)

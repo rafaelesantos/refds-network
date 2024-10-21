@@ -11,7 +11,7 @@ public actor RefdsWebSocketNetworkAdapter: RefdsWebSocketClient {
     
     public func connect<Request: RefdsWebSocketRequest>(with request: Request) async throws -> AsyncThrowingStream<Data, Error> {
         guard let endpoint = request.endpoint,
-              let url = endpoint.url else {
+              let url = await endpoint.url else {
             let error = RefdsWebSocketError.invalidUrl
             await error.logger()
             throw error

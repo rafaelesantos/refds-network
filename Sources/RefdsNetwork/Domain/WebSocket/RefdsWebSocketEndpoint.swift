@@ -1,37 +1,44 @@
 import Foundation
 import RefdsShared
 
-public protocol RefdsWebSocketEndpoint: RefdsLogger {
-    var scheme: RefdsWebSocketScheme { get }
-    var host: String { get }
-    var path: String { get }
-    var queryItems: [URLQueryItem]? { get }
-    var headers: [RefdsHttpHeader]? { get }
-    var body: Data? { get }
+public protocol RefdsWebSocketEndpoint: RefdsLogger, Sendable {
+    var scheme: RefdsWebSocketScheme { get async }
+    var host: String { get async }
+    var path: String { get async }
+    var queryItems: [URLQueryItem]? { get async }
+    var headers: [RefdsHttpHeader]? { get async }
+    var body: Data? { get async }
 }
 
 extension RefdsWebSocketEndpoint {
     public var queryItems: [URLQueryItem]? { nil }
     public var headers: [RefdsHttpHeader]? { nil }
     public var body: Data? { nil }
-    public var url: URL? { urlComponents.url }
+    
+    public var url: URL? {
+        get async {
+            await urlComponents.url
+        }
+    }
     
     public var urlComponents: URLComponents {
-        var  urlComponents = URLComponents()
-        urlComponents.scheme = scheme.rawValue
-        urlComponents.host = host
-        urlComponents.path = path
-        urlComponents.queryItems = queryItems
-        return urlComponents
+        get async {
+            var  urlComponents = URLComponents()
+            urlComponents.scheme = await scheme.rawValue
+            urlComponents.host = await host
+            urlComponents.path = await path
+            urlComponents.queryItems = await queryItems
+            return urlComponents
+        }
     }
     
     public func logger() async {
-        guard let url = url else { return }
+        guard let url = await url else { return }
         var message = "\t ENDPOINT - \(url)"
-        if let headers = headers {
+        if let headers = await headers {
             message += "\n\t HEADERS [\n\t\t\(headers.map({ "\($0.rawValue.key): \($0.rawValue.value)" }).joined(separator: ",\n\t\t"))]"
         }
-        if let body = body, let bodyString = String(data: body, encoding: .utf8) {
+        if let body = await body, let bodyString = String(data: body, encoding: .utf8) {
             message += "\n\t BODY \(bodyString.replacingOccurrences(of: "\n", with: "\n\t\t"))"
         }
         await Self.loggerInstance.info(message: message)
