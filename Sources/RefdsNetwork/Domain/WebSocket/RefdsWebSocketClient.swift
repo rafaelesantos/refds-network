@@ -1,7 +1,7 @@
 import Foundation
 import RefdsShared
 
-public protocol RefdsWebSocketClient {
+public protocol RefdsWebSocketClient: Sendable {
     func send<Value: RefdsModel>(
         value: Value,
         type: Value.Type
