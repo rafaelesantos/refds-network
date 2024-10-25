@@ -16,7 +16,7 @@ public actor RefdsHttpNetworkAdapter: RefdsHttpClient {
               let url = await endpoint.url else {
             let error = RefdsHttpError.invalidUrl
             await error.logger()
-            throw RefdsError.requestError(error: error)
+            throw RefdsError.request(for: .unsupportedURL)
         }
         
         await endpoint.logger()
