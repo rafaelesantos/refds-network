@@ -51,6 +51,7 @@ public actor RefdsWebSocketNetworkAdapter: RefdsWebSocketClient {
             await error.logger()
             throw error
         }
+        value.logger()
         try await webSocketTask?.send(.string(encoded.content))
     }
     
