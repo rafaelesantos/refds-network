@@ -16,9 +16,7 @@ public extension RefdsWebSocketRequest {
         _ data: Data,
         type: Decoded.Type
     ) async throws -> Decoded {
-        guard let decoded: Decoded = data.asModel() else {
-            throw RefdsWebSocketError.invalidResponse(content: data)
-        }
+        let decoded = try data.asModel(for: Decoded.self)
         return decoded
     }
 }
