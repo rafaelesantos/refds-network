@@ -16,9 +16,7 @@ public extension RefdsHttpRequest {
         _ data: Data,
         type: Decoded.Type
     ) async throws -> Decoded {
-        guard let decoded: Decoded = data.asModel() else {
-            throw RefdsHttpError.invalidResponse(content: data)
-        }
+        let decoded = try data.asModel(for: Decoded.self)
         await decoded.logger()
         return decoded
     }
