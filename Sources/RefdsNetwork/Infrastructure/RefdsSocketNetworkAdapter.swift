@@ -72,7 +72,7 @@ public actor RefdsSocketNetworkAdapter: RefdsSocketClient {
     }
     
     public func send(message: String) async throws {
-        guard let content = message.data(using: .utf8) else {
+        guard let content = message.enter().data(using: .utf8) else {
             let error = RefdsError.request(for: .requestBodyStreamExhausted)
             await error.logger()
             throw error
