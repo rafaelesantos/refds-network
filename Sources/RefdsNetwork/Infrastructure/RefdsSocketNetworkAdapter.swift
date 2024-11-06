@@ -26,18 +26,16 @@ public actor RefdsSocketNetworkAdapter: RefdsSocketClient {
     
     private func connect() async throws {
         try await withCheckedThrowingContinuation { continuation in
-            Task(priority: .high) {
-                connection?.stateUpdateHandler = { state in
-                    switch state {
-                    case .ready:
-                        continuation.resume()
-                    case .failed(let error):
-                        continuation.resume(throwing: error)
-                    case .cancelled:
-                        continuation.resume(throwing: RefdsError.request(for: .cancelled))
-                    default:
-                        break
-                    }
+            connection?.stateUpdateHandler = { state in
+                switch state {
+                case .ready:
+                    continuation.resume()
+                case .failed(let error):
+                    continuation.resume(throwing: error)
+                case .cancelled:
+                    continuation.resume(throwing: RefdsError.request(for: .cancelled))
+                default:
+                    break
                 }
             }
             connection?.start(
@@ -65,13 +63,11 @@ public actor RefdsSocketNetworkAdapter: RefdsSocketClient {
             minimumIncompleteLength: 1,
             maximumLength: 65536
         ) { [weak self] content, contentContext, isComplete, error in
-            Task(priority: .high) {
-                guard let self else { return }
-                if let error = error { return continuation.finish(throwing: error) }
-                if let data = content, let value = String(data: data, encoding: .utf8) { continuation.yield(value) }
-                if isComplete { return continuation.finish() }
-                await self.receive(on: continuation)
-            }
+            guard let self else { return }
+            if let error = error { return continuation.finish(throwing: error) }
+            if let data = content, let value = String(data: data, encoding: .utf8) { continuation.yield(value) }
+            if isComplete { return continuation.finish() }
+            Task(priority: .high) { await receive(on: continuation) }
         }
     }
     
@@ -86,10 +82,8 @@ public actor RefdsSocketNetworkAdapter: RefdsSocketClient {
             connection?.send(
                 content: content,
                 completion: .contentProcessed { error in
-                    Task(priority: .high) {
-                        guard let error else { return continuation.resume() }
-                        return continuation.resume(throwing: error)
-                    }
+                    guard let error else { return continuation.resume() }
+                    return continuation.resume(throwing: error)
                 }
             )
         }
