@@ -26,8 +26,8 @@ public actor RefdsSocketNetworkAdapter: RefdsSocketClient {
     
     private func connect() async throws {
         try await withCheckedThrowingContinuation { continuation in
-            connection?.stateUpdateHandler = { state in
-                Task(priority: .high) {
+            Task(priority: .high) {
+                connection?.stateUpdateHandler = { state in
                     switch state {
                     case .ready:
                         continuation.resume()
