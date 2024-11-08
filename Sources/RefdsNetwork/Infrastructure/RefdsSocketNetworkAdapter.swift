@@ -20,20 +20,33 @@ public actor RefdsSocketNetworkAdapter: RefdsSocketClient {
             port: endpoint.port,
             using: endpoint.parameters
         )
-        try await connect()
-        return try await receive()
+        
+        return AsyncThrowingStream { continuation in
+            Task(priority: .high) {
+                let stream = try await connect()
+                for await status in stream {
+                    switch status {
+                    case .open: await receive(on: continuation)
+                    case .close: continuation.finish()
+                    }
+                }
+                
+                continuation.onTermination = { [weak self] _ in
+                    guard let self else { return }
+                    Task { await disconnect() }
+                }
+            }
+        }
     }
     
-    private func connect() async throws {
-        try await withCheckedThrowingContinuation { continuation in
+    private func connect() async throws -> AsyncStream<RefdsSocketStatus> {
+        AsyncStream { continuation in
             connection?.stateUpdateHandler = { state in
                 switch state {
                 case .ready:
-                    continuation.resume()
-                case .failed(let error):
-                    continuation.resume(throwing: error)
-                case .cancelled:
-                    continuation.resume(throwing: RefdsError.request(for: .cancelled))
+                    continuation.yield(.open)
+                case .cancelled, .failed:
+                    continuation.yield(.close)
                 default:
                     break
                 }
@@ -45,16 +58,6 @@ public actor RefdsSocketNetworkAdapter: RefdsSocketClient {
                     attributes: .concurrent
                 )
             )
-        }
-    }
-    
-    private func receive() async throws -> AsyncThrowingStream<String, Error> {
-        AsyncThrowingStream { continuation in
-            Task(priority: .high) { await receive(on: continuation) }
-            continuation.onTermination = { [weak self] _ in
-                guard let self else { return }
-                Task { await disconnect() }
-            }
         }
     }
     
